@@ -1,11 +1,10 @@
-from gtts import gTTS
-from playsound import playsound
+# -*- coding: utf-8 -*-
 from flask import Flask, render_template,request,redirect,url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.secret_key = "Secret Key"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shindalsoo.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///kimhyoseong.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -15,11 +14,13 @@ class Employee(db.Model):
     username = db.Column(db.String(100))
     email = db.Column(db.String(200))
     tel = db.Column(db.String(50))
+    jicwi = db.Column(db.String(100))
 
-    def __init__(self, username, email, tel):
+    def __init__(self, username, email, tel, jicwi):
         self.username = username
         self.email = email
         self.tel = tel
+        self.jicwi = jicwi
 
 @app.route('/')
 def index():
@@ -32,6 +33,7 @@ def insert():
         username = request.form['username']
         email = request.form['email']
         tel = request.form['tel']
+        jicwi = request.form['jicwi']
 
         insertUser = Employee(username,email,tel)
         db.session.add(insertUser)
@@ -54,6 +56,7 @@ def update():
         updateUser.username = request.form['username']
         updateUser.email = request.form['email']
         updateUser.tel = request.form['tel']
+        updateUser.jicwi = request.form['jicwi']
         db.session.commit()
         return redirect(url_for('index'))
 
